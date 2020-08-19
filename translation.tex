@@ -1,0 +1,100 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{hyperref}
+\newcommand{\Tau}{\mathcal{T}}  % \mathrm{\mathcal{T}}}
+
+\usepackage{amsthm} % theorems
+\usepackage{mathtools} % \coloneqq  ( tlmgr install mathtools )
+% \usepackage[lite]{mtpro2}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\newtheorem{exercise}{Exercise}[section]
+\newcommand{\Fun}{{\mbox{Fun}}}
+\newcommand{\Rel}{{\mbox{Rel}}}
+\newcommand{\dom}{{\mbox{dom}}}
+\newcommand{\apo}{{\mbox{'}}}  % apostrophe
+\newcommand{\The}{{\mbox{The\,}}}
+\newcommand{\Ob}{{\mbox{Ob}}}
+\newcommand{\Mor}{{\mbox{Mor}}}
+\newcommand{\Cat}{{\mbox{Cat}}}
+\newcommand{\Hom}{{\mbox{Hom}}}
+\newcommand{\Nat}{{\mbox{Nat}}}
+\newcommand{\HomMor}{{\widetilde{\Hom}\mbox{}}}
+\newcommand{\FMor}{{\widetilde{F}\mbox{}}}
+\newcommand{\GMor}{{\widetilde{G}\mbox{}}}
+\newcommand{\op}{{\mbox{op}}}
+\newcommand{\id}{{\mbox{id}}}
+\newcommand{\mor}{{\mbox{mor}}}
+\newcommand{\LRA}{\Longleftrightarrow}
+\newcommand{\defi}{{\mbox{def}}}
+\newcommand{\eqdef}{{\stackrel{\defi}{=}}}
+\newcommand{\propdef}{{\stackrel{\defi}{\ \Longleftrightarrow\ }}}
+\newcommand{\inter}{{\bigcap}}
+\newcommand{\interclass}{{{\bigcap}_C}}
+\newcommand{\Set}{{\mbox{Set}}}
+\newcommand{\myprf}{\noindent\textbf{Proof.}}
+% quod erat demonstrandum :
+\newcommand{\myqed}{\noindent\textbf{Q.E.D.}} 
+
+\begin{document}
+Our aim is to translate Isabelle's term into theorem statement, which is about derivability of certain formulas in the predicate calculus.
+
+The following assignment of the proof constant to some term  
+$$\mbox{exE}:``[| \exists x.P(x); \bigwedge x. P(x) \Longrightarrow R|] \Longrightarrow R"$$
+is a notation for
+$$\mbox{exE}:``\exists x.P(x) \Longrightarrow \left(\left(\bigwedge x. P(x) \Longrightarrow R\right) \Longrightarrow R\right)".$$
+
+The following assignment
+$$\mbox{impI}:``(A\Longrightarrow B)\Longrightarrow (A\longrightarrow B)"$$
+gives us a hint that impI should be treated as the deduction theorem.
+
+\begin{definition}
+ $\Tau$ that is a complete theory iff
+$$ \forall \varphi. (\Tau \vdash \phi) \lor (\Tau \vdash \neg\varphi).$$
+\end{definition}
+% \Tau \nvdash \phi
+
+\begin{theorem}
+Let $\Tau$ be a complete first-order theory and $\alpha,\beta$ are formulas in a language of that theory, then
+$$ ((\Tau \vdash \alpha)\Longrightarrow (\Tau \vdash \beta)) \Longrightarrow (\Tau \vdash (\alpha\longrightarrow \beta)),$$
+where $\Longrightarrow$ is the symbol for implication of metatheory.\\
+%\proof\ \\
+\myprf\\
+Assume H:$((\Tau \vdash \alpha)\Longrightarrow (\Tau \vdash \beta))$.\\
+To prove $\Tau \vdash \alpha \longrightarrow \beta$ it is enough to show that $\Tau, \alpha \vdash \beta$ and then apply deduction theorem. So now our aim is $\Tau, \alpha \vdash \beta$.\\
+The theorey $\Tau$ is complete, therefore there are two possibilities:\\
+1) $\Tau \vdash \alpha$.\\
+Therefore, $\Tau \vdash \beta$ by the hypothesis H and Modus Ponens.\\ Then, by weakening, $\Tau, \alpha \vdash \beta$\\
+2) $\Tau \vdash \neg\alpha$.\\
+Then $\Tau, \alpha \vdash \neg\alpha$ by weakening.\\ $\Tau, \alpha \vdash \bot$ by axiom for negation and MP.\\ So $\Tau, \alpha \vdash \beta$ by \textit{``ex falso quodlibet''} principle.\\
+\myqed
+%\qed
+\end{theorem}
+Let's 
+
+\begin{definition}
+ $I=J_{[]}()$ is a translation from Isabelle/ZF's term to metatheory for first-order logic. We choose this metatheory to be also a set theory. $$I : \mbox{IsabelleZFTerms} \to \mbox{FOLFormulas}.$$
+ $J$ has an argument $l$ which is some ordered list of zeroes and ones. (It reperesents binary form of the numbers of variables. It will be used later to obtain a variable that is guranteed to be new in the formula.)\\
+ 
+$J_l(t)$ is defined inductively:\\
+$J_l(\varphi) = ``(\Tau \vdash \varphi)"$ where $\phi$ is any term of type $o$.\\
+$J_l(X ==> Y) = (J_{l+[0]}(X) \longrightarrow J_{l+[1]}(Y))$ where $X, Y$ are terms of type $prop$ and ``+" is a lists' concatenation.\\
+Now the complicated part:\\
+We need to  translate
+$J_l(\bigwedge S. P)$, where $S$ is a symbol of some type and $P$ is some term of type $prop$. (It may contain $S$ variable.)\\
+First order theories has only predicate and functional symbols in their signature.\\
+$$\mbox{Sign}(\Tau) =\mbox{Const}\cup \mbox{Func} \cup \mbox{Pred}.$$
+We assume that our object $\Tau$ theory is already extended by all possible definitions of terms and formulas. (\url{https://en.wikipedia.org/wiki/Extension_by_definitions})
+
+\end{definition}
+
+%\myprf
+%\myqed
+\end{document}
