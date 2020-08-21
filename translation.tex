@@ -42,7 +42,19 @@
 \newcommand{\myprf}{\noindent\textbf{Proof.}}
 % quod erat demonstrandum :
 \newcommand{\myqed}{\noindent\textbf{Q.E.D.}} 
-
+% Logic:
+\newcommand{\Spec}{{\mbox{Spec}}}
+\newcommand{\Const}{{\mbox{Const}}}
+\newcommand{\Var}{{\mbox{Var}}}
+\newcommand{\Func}{{\mbox{Func}}}
+\newcommand{\Pred}{{\mbox{Pred}}}
+\newcommand{\Fm}{{\mbox{Fm}}}
+\newcommand{\WF}{{\mbox{WF}}}
+\newcommand{\Term}{{\mbox{Term}}}
+\newcommand{\var}{{\mbox{var}}}
+\newcommand{\term}{{\mbox{term}}}
+\newcommand{\type}{{\mbox{type}}}
+\newcommand{\ITerm}{{\mbox{ITerm}}}
 \begin{document}
 Our aim is to translate Isabelle's term into theorem statement, which is about derivability of certain formulas in the predicate calculus.
 
@@ -58,9 +70,28 @@ The following assignment
 $$\mbox{impI}:``(A\Longrightarrow B)\Longrightarrow (A\longrightarrow B)"$$
 gives us a hint that impI should be treated as the deduction theorem.
 
+
+Let's fix some first-order signature $\sigma = \langle \Var, \Const, \Func, \Pred\rangle$ for the rest of paper.\\
+
+$\Spec = \{\mbox{``,",``(",``)",``."}\}$
 \begin{definition}
- $\Tau$ that is a complete theory iff
-$$ \forall \varphi. (\Tau \vdash \phi) \lor (\Tau \vdash \neg\varphi).$$
+Alphabeth $\mathcal{A} = \bigcup\{\Var, \Const, \Func, \Pred, \Spec\}$.
+\end{definition}
+
+
+It gives rise to a set of formulas $\Fm$ in that signature.
+\begin{definition}
+Theory is any set of closed formulas.
+\end{definition}
+A requirement of formulas to be closed is a main difference between contexts and theories.
+\begin{definition}
+A theory $\Tau$ is consistent iff
+$$ \Tau \nvdash \bot.$$
+\end{definition}
+
+\begin{definition}
+A theory $\Tau$ is complete iff
+$$ \forall \varphi \in \Fm. (\Tau \vdash \phi) \lor (\Tau \vdash \neg\varphi).$$
 \end{definition}
 % \Tau \nvdash \phi
 
@@ -80,18 +111,32 @@ Then $\Tau, \alpha \vdash \neg\alpha$ by weakening.\\ $\Tau, \alpha \vdash \bot$
 \myqed
 %\qed
 \end{theorem}
-Let's 
 
-\begin{definition}
- $I=J_{[]}()$ is a translation from Isabelle/ZF's term to metatheory for first-order logic. We choose this metatheory to be also a set theory. $$I : \mbox{IsabelleZFTerms} \to \mbox{FOLFormulas}.$$
- $J$ has an argument $l$ which is some ordered list of zeroes and ones. (It reperesents binary form of the numbers of variables. It will be used later to obtain a variable that is guranteed to be new in the formula.)\\
+Theorems of Isabelle are translated into statements about some consistent and complete theory $\Tau$.
+
+\begin{definition}%$I=J_{[]}()$ 
+ A function $I$ is a translation from Isabelle/ZF's term to metatheory for first-order logic. We choose this metatheory to be also a set theory. $$I : \mbox{IsabelleZFTerms} \to \mbox{FOFormulas}.$$
  
-$J_l(t)$ is defined inductively:\\
-$J_l(\varphi) = ``(\Tau \vdash \varphi)"$ where $\phi$ is any term of type $o$.\\
-$J_l(X ==> Y) = (J_{l+[0]}(X) \longrightarrow J_{l+[1]}(Y))$ where $X, Y$ are terms of type $prop$ and ``+" is a lists' concatenation.\\
+Translation for types: $I_{\type}$\\
+1) $I_{\type}(i)=\Term$\\
+2) $I_{\type}(o)=\Fm$\\
+3) $I_{\type}(A\Rightarrow B)=I_{type}(A)\rightarrow I_{type}(B)$ (set of functions)\\
+Let's fix some function $I_\var$ from set of Isabelle's variables to .
+Translation for terms: $I_{\term}$\\
+1) $I_{\term}(\Phi)=\WF(\varphi) \land (\Tau \vdash \varphi)$.
+Here $\varphi$ is a formula that obtained from $\Phi$. Syntactic applications in $\Phi$ are treated as real ones in $\varphi$.\\
+2) $I_{\term}(X ==> Y) = (I_{\term}(X) \longrightarrow I_{\term}(Y))$ for any $X,Y\in \ITerm.$\\
+3) $I_{\term}(\bigwedge S::T. Y) = \forall s \in I_\type(T). I_\term(Y)$\\
+S\\
+
+% $J$ has an argument $l$ which is some ordered list of zeroes and ones. (It reperesents binary form of the numbers of variables. It will be used later to obtain a variable that is guranteed to be new in the formula.)\\
+ 
+%$J_l(t)$ is defined inductively:\\
+%$J_l(\varphi) = ``(\Tau \vdash \varphi)"$ where $\phi$ is any term of type $o$.\\
+%$J_l(X ==> Y) = (J_{l+[0]}(X) \longrightarrow J_{l+[1]}(Y))$ where $X, Y$ are terms %of type $prop$ and ``+" is a lists' concatenation.\\
 
 Now the complicated part:\\
-We need to  translate
+We need to translate
 $J_l(\bigwedge S. P)$, where $S$ is a symbol of some type and $P$ is some term of type $prop$. (It may contain $S$ variable.)\\
 First order theories has only predicate and functional symbols in their signature.\\
 $$\mbox{Sign}(\Tau) =\mbox{Const}\cup \mbox{Func} \cup \mbox{Pred}.$$
