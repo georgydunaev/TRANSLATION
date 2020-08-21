@@ -127,26 +127,42 @@ Translation for terms: $I_{\term}$\\
 Here $\varphi$ is a formula that obtained from $\Phi$. Syntactic applications in $\Phi$ are treated as real ones in $\varphi$.\\
 2) $I_{\term}(X ==> Y) = (I_{\term}(X) \longrightarrow I_{\term}(Y))$ for any $X,Y\in \ITerm.$\\
 3) $I_{\term}(\bigwedge S::T. Y) = \forall s \in I_\type(T). I_\term(Y)$\\
-S\\
-
+\\
 % $J$ has an argument $l$ which is some ordered list of zeroes and ones. (It reperesents binary form of the numbers of variables. It will be used later to obtain a variable that is guranteed to be new in the formula.)\\
  
 %$J_l(t)$ is defined inductively:\\
 %$J_l(\varphi) = ``(\Tau \vdash \varphi)"$ where $\phi$ is any term of type $o$.\\
 %$J_l(X ==> Y) = (J_{l+[0]}(X) \longrightarrow J_{l+[1]}(Y))$ where $X, Y$ are terms %of type $prop$ and ``+" is a lists' concatenation.\\
 
-Now the complicated part:\\
-We need to translate
-$J_l(\bigwedge S. P)$, where $S$ is a symbol of some type and $P$ is some term of type $prop$. (It may contain $S$ variable.)\\
-First order theories has only predicate and functional symbols in their signature.\\
-$$\mbox{Sign}(\Tau) =\mbox{Const}\cup \mbox{Func} \cup \mbox{Pred}.$$
-We assume that our object $\Tau$ theory is already extended by all possible definitions of terms and formulas. (\url{https://en.wikipedia.org/wiki/Extension_by_definitions})\\
-Example: 
-$$\bigcap :: ``(i \Rightarrow o) \Rightarrow i"$$
-For any formula $\varphi$ one can prove that 
-$$\forall x \exists ! z. (x\in z \longleftrightarrow ((\forall y. \varphi(y) \longrightarrow x\in y)\land (\exists w. \varphi(w))))$$
-(Another example is $\The :: ``(i \Rightarrow o) \Rightarrow i".$)\\
-\\
+%Now the complicated part:\\
+%We need to translate
+%$J_l(\bigwedge S. P)$, where $S$ is a symbol of some type and $P$ is some term of type $prop$. (It may contain $S$ variable.)\\
+%First order theories has only predicate and functional symbols in their signature.\\
+%$$\mbox{Sign}(\Tau) =\mbox{Const}\cup \mbox{Func} \cup \mbox{Pred}.$$
+%We assume that our object $\Tau$ theory is already extended by all possible definitions of terms and formulas. (\url{https://en.wikipedia.org/wiki/Extension_by_definitions})\\
+%Example: 
+%$$\bigcap :: ``(i \Rightarrow o) \Rightarrow i"$$
+%For any formula $\varphi$ one can prove that 
+%$$\forall x \exists ! z. (x\in z \longleftrightarrow ((\forall y. \varphi(y) \longrightarrow x\in y)\land (\exists w. \varphi(w))))$$
+%(Another example is $\The :: ``(i \Rightarrow o) \Rightarrow i".$)\\
+%\\
+
+\noindent
+
+\begin{theorem}
+Let's prove the translation of
+$$(\bigwedge x. P(x))==> \forall x. P(x).$$
+Its translation is
+$$(\forall x\in \Term. \Tau \vdash P(x))\longrightarrow \Tau \vdash \forall x. P(x).$$
+\myprf\\
+Since $\Tau$ is complete,
+$$(\Tau \vdash \forall x. P(x))\lor (\Tau\vdash \neg \forall x. P(x)).$$
+Let's assume that $(\Tau\vdash \neg \forall x. P(x)).$\\
+...\\
+Therefore, $(\Tau \vdash \forall x. P(x))$.\\
+\myqed
+\end{theorem}
+
 ...\\
 ...\\
 ...\\
