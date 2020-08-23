@@ -5,6 +5,25 @@
 \usepackage{amssymb}
 \usepackage{float}
 \usepackage{hyperref}
+
+%% <brackets>
+\usepackage{mathtools} 
+
+%\DeclareFontEncoding{FML}{}{}
+%\DeclareFontSubstitution{FML}{futm}{m}{it}
+%\DeclareFontEncoding{FMS}{}{} 
+%\DeclareFontSubstitution{FMS}{futm}{m}{n}
+%\DeclareFontEncoding{FMX}{}{} 
+%\DeclareFontSubstitution{FMX}{futm}{m}{n}
+%\DeclareSymbolFont{symbols}{FMS}{futm}{m}{n}
+%\DeclareSymbolFont{largesymbols}{FMX}{futm}{m}{n}
+%\DeclareMathDelimiter{\llbracket}{\mathopen}{symbols}{153}{largesymbols}{133}
+%\DeclareMathDelimiter{\rrbracket}{\mathclose}{symbols}{154}{largesymbols}{134}
+%% </brackets>
+\newcommand{\llbrack}{{[|}}
+\newcommand{\rrbrack}{{|]}}
+
+% \usepackage{fourier}  % for brackets
 \newcommand{\Tau}{\mathcal{T}}  % \mathrm{\mathcal{T}}}
 
 \usepackage{amsthm} % theorems
@@ -48,13 +67,18 @@
 \newcommand{\Var}{{\mbox{Var}}}
 \newcommand{\Func}{{\mbox{Func}}}
 \newcommand{\Pred}{{\mbox{Pred}}}
-\newcommand{\Fm}{{\mbox{Fm}}}
-\newcommand{\WF}{{\mbox{WF}}}
 \newcommand{\Term}{{\mbox{Term}}}
+\newcommand{\Fm}{{\mbox{Fm}}}
+\newcommand{\FV}{{\mbox{FV}}}
+\newcommand{\WF}{{\mbox{WF}}}
 \newcommand{\var}{{\mbox{var}}}
 \newcommand{\term}{{\mbox{term}}}
 \newcommand{\type}{{\mbox{type}}}
 \newcommand{\ITerm}{{\mbox{ITerm}}}
+% Isabelle
+\newcommand{\spec}{{\mbox{spec}}}
+\newcommand{\allI}{{\mbox{allI}}}
+
 \begin{document}
 Our aim is to translate Isabelle's term into theorem statement, which is about derivability of certain formulas in the predicate calculus.
 
@@ -73,13 +97,46 @@ gives us a hint that impI should be treated as the deduction theorem.
 
 Let's fix some first-order signature $\sigma = \langle \Var, \Const, \Func, \Pred\rangle$ for the rest of paper.\\
 
-$\Spec = \{\mbox{``,",``(",``)",``."}\}$
+% We fix some $D\notin A$ such that 
+Assume we also have some distinct symbol $D$ which invalidates every formula that contains it: $\WF(D)=\bot$.\\
+We will need it later for dealing with incorrect substitution. 
+$\Spec = \{\mbox{``,",``(",``)",``.",}``\land",``\lor",``\longrightarrow", ``D"\}$
+
+
 \begin{definition}
 Alphabeth $\mathcal{A} = \bigcup\{\Var, \Const, \Func, \Pred, \Spec\}$.
 \end{definition}
 
+\begin{definition}
+$\WF$ is a predicate of valence 1.\\
+*) $\WF(w) \Longrightarrow \WF(``("+w+``)")$\\
+*) $\llbrack \WF(w_1), \WF(w_2) \rrbrack \Longrightarrow \WF(``("+w_1+``\land"+w_2+``)")$\\
+...
+\end{definition}
 
 It gives rise to a set of formulas $\Fm$ in that signature.
+\begin{definition}
+$\Fm = \{ w\in \mathcal{A}^* : \WF(w)\}.$
+\end{definition}
+
+\begin{definition}
+The substitution $t[b/x]$ of the variable with some term, is defined as usual:
+\\$x[b/x] = b$
+\\$y[b/x] = y$
+\\$t(t_1,\dots, t_n)[b/x] = t(t_1[b/x],\dots, t_n[b/x])$
+\end{definition}
+
+\begin{definition}
+Substitution of the variable with term in formula:
+$\varphi[b/x]$
+\\$P(t_1, \dots, t_n)[b/x]=P(t_1[b/x], \dots, t_n[b/x])$
+\\$(\psi_1 \longrightarrow \psi_2)[b/x]=(\psi_1[b/x] \longrightarrow \psi_2[b/x])$
+\\$(\forall x. \psi)[b/x]=(\forall x. \psi)$
+\\$(\forall z. \psi)[b/x]=(\forall z. \psi[b/x])$ if $z\notin \FV(b)$;
+\\$(\forall z. \psi)[b/x]=D$ otherwise.
+\end{definition}
+
+
 \begin{definition}
 Theory is any set of closed formulas.
 \end{definition}
@@ -102,7 +159,7 @@ where $\Longrightarrow$ is the symbol for implication of metatheory.\\
 %\proof\ \\
 \myprf\\
 Assume H:$((\Tau \vdash \alpha)\Longrightarrow (\Tau \vdash \beta))$.\\
-To prove $\Tau \vdash \alpha \longrightarrow \beta$ it is enough to show that $\Tau, \alpha \vdash \beta$ and then apply deduction theorem. So now our aim is $\Tau, \alpha \vdash \beta$.\\
+To prove $\Tau \vdash (\alpha \longrightarrow \beta$) it is enough to show that $\Tau, \alpha \vdash \beta$ and then apply the deduction theorem. So now our aim is $\Tau, \alpha \vdash \beta$.\\
 The theorey $\Tau$ is complete, therefore there are two possibilities:\\
 1) $\Tau \vdash \alpha$.\\
 Therefore, $\Tau \vdash \beta$ by the hypothesis H and Modus Ponens.\\ Then, by weakening, $\Tau, \alpha \vdash \beta$\\
@@ -114,20 +171,29 @@ Then $\Tau, \alpha \vdash \neg\alpha$ by weakening.\\ $\Tau, \alpha \vdash \bot$
 
 Theorems of Isabelle are translated into statements about some consistent and complete theory $\Tau$.
 
+\begin{definition}
+We will call the following symbol a ``weak derivability".
+$$(\Tau \vdash_w \psi) \propdef (\WF(\psi) \longrightarrow (\Tau \vdash \psi))$$
+\end{definition}
+
+
 \begin{definition}%$I=J_{[]}()$ 
  A function $I$ is a translation from Isabelle/ZF's term to metatheory for first-order logic. We choose this metatheory to be also a set theory. $$I : \mbox{IsabelleZFTerms} \to \mbox{FOFormulas}.$$
  
-Translation for types: $I_{\type}$\\
-1) $I_{\type}(i)=\Term$\\
-2) $I_{\type}(o)=\Fm$\\
-3) $I_{\type}(A\Rightarrow B)=I_{type}(A)\rightarrow I_{type}(B)$ (set of functions)\\
-Let's fix some function $I_\var$ from set of Isabelle's variables to .
-Translation for terms: $I_{\term}$\\
-1) $I_{\term}(\Phi)=\WF(\varphi) \land (\Tau \vdash \varphi)$.
-Here $\varphi$ is a formula that obtained from $\Phi$. Syntactic applications in $\Phi$ are treated as real ones in $\varphi$.\\
-2) $I_{\term}(X ==> Y) = (I_{\term}(X) \longrightarrow I_{\term}(Y))$ for any $X,Y\in \ITerm.$\\
+Translation for types: $I_{\type}$
+\\1) $I_{\type}(i)=\Term$
+\\2) $I_{\type}(o)=\Fm$
+\\3) $I_{\type}(A\Rightarrow B)=I_{type}(A)\rightarrow I_{type}(B)$ (set of functions)
+\\Let's fix some function $I_\var$ from set of Isabelle's variables to .
+\\Translation for terms: $I_{\term}$
+\\1) $I_{\term}(\Phi)= (\Tau \vdash_w \varphi)$
+% (\WF(\varphi) \longrightarrow (\Tau \vdash \varphi))$.
+\\Here $\varphi$ is a formula that obtained from $\Phi$.
+\\Syntactic applications in $\Phi$ are treated as real ones in $\varphi$.
+\\2) $I_{\term}(X ==> Y) = (I_{\term}(X) \longrightarrow I_{\term}(Y))$ for any $X,Y\in \ITerm.$\\
 3) $I_{\term}(\bigwedge S::T. Y) = \forall s \in I_\type(T). I_\term(Y)$\\
-\\
+\end{definition}
+
 % $J$ has an argument $l$ which is some ordered list of zeroes and ones. (It reperesents binary form of the numbers of variables. It will be used later to obtain a variable that is guranteed to be new in the formula.)\\
  
 %$J_l(t)$ is defined inductively:\\
@@ -148,26 +214,78 @@ Here $\varphi$ is a formula that obtained from $\Phi$. Syntactic applications in
 %\\
 
 \noindent
-
 \begin{theorem}
-Let's prove the translation of
-$$(\bigwedge x. P(x))==> \forall x. P(x).$$
+(SKIP THIS WRONG THEOREM, HERE MISTAKENLY $\vdash_w=\vdash$)
+\\Let's prove the translation of
+$$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
 Its translation is
-$$(\forall x\in \Term. \Tau \vdash P(x))\longrightarrow \Tau \vdash \forall x. P(x).$$
-\myprf\\
-Since $\Tau$ is complete,
+$$(\forall t\in \Term. \Tau \vdash P(t))\longrightarrow \Tau \vdash \forall x. P(x).$$
+\myprf
+\\We have a hypothesis H:$(\forall x\in \Term. \Tau \vdash P(x))$.
+\\Since $\Tau$ is complete,
 $$(\Tau \vdash \forall x. P(x))\lor (\Tau\vdash \neg \forall x. P(x)).$$
-Let's assume that $(\Tau\vdash \neg \forall x. P(x)).$\\
-...\\
-Therefore, $(\Tau \vdash \forall x. P(x))$.\\
-\myqed
+Let's assume that $(\Tau\vdash \neg \forall x. P(x)).$
+\\It means $(\Tau\vdash \exists x. \neg P(x)).$
+\\$\Tau$ is a Henken theory, so there exists a constant $c$ such that $\Tau\vdash \neg P(c)$.
+\\Moreover, $c\in \Const \subseteq \Term$. $\stackrel{H}{\Longrightarrow} \Tau \vdash P(c)$.
+\\Theory proves both statement P(c) and it's negation, so $\Tau\vdash \bot$. This contradicts the assumption that $\Tau$ is consistent.
+\\Therefore, the other possibility holds: $(\Tau \vdash \forall x. P(x))$.
+\\\myqed
 \end{theorem}
 
-...\\
+\begin{theorem}
+(BETTER VARIANT?)
+\\Let's prove the translation of
+$$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
+Its translation is
+$$(\forall t\in \Term. \Tau \vdash_w \varphi[t/x])\longrightarrow \Tau \vdash_w (\forall x. \varphi).$$
+\myprf
+\\We have a hypothesis H:$(\forall x\in \Term. \WF(\varphi) \longrightarrow \Tau \vdash \varphi)$.
+\\We also have hypothesis H2:$\WF(\forall x. \varphi)$.
+\\Since $\Tau$ is complete and $\WF(\forall x. \varphi)$,
+$$(\Tau \vdash \forall x. \varphi)\lor (\Tau\vdash \neg \forall x. \varphi).$$
+Let's assume that $(\Tau\vdash \neg \forall x. \varphi).$
+\\It means $(\Tau\vdash \exists x. \neg \varphi)$ by De Morgan's rule.
+\\$\Tau$ is a Henken theory, so there exists a constant $c$ such that $\Tau\vdash \neg \varphi[c/x]$.
+\\We now that $\WF(\varphi[c/x])$ since $\WF(\varphi)$ and the fact that the substitution of variable with constant is always correct.
+\\Moreover, $c\in \Const \subseteq \Term$. $\stackrel{H}{\Longrightarrow} \Tau \vdash \varphi[c/x]$.
+\\Theory proves both statement $\varphi[c/x]$ and it's negation, so $\Tau\vdash \bot$. This contradicts the assumption that $\Tau$ is consistent.
+\\Therefore, the other possibility holds: $(\Tau \vdash \forall x. P(x))$.
+\\\myqed
+\end{theorem}
+
+\begin{theorem}
+Assume that $I(P)=\varphi$.
+Consider the proof constant
+$$\spec: ``\forall x. P(x) ==> P(t)".$$
+%$$(\bigwedge t. P(t))==> \forall x. P(x).$$
+The translation of its term is
+%$$(\Tau \vdash \forall x. P(x))\longrightarrow  (\forall t\in \Term. \Tau \vdash P(t)).$$
+$$(\Tau \vdash_w \forall x. \varphi[x/x])\longrightarrow  (\forall t\in \Term.  \Tau \vdash_w \varphi[t/x]).$$
+$$(\forall t\in \Term.(\WF(\forall x. \varphi[x/x]) \longrightarrow \Tau \vdash \forall x. \varphi[x/x])\longrightarrow   (\WF(\varphi[t/x]) \longrightarrow \Tau \vdash \varphi[t/x])).$$
+Let's prove it.\\
+\myprf\\
+We have a hypothesis H:$\Tau \vdash (\forall x. \varphi(x))$.
+\\1)Let's show that $\WF(\forall x. \varphi [x/x])$.
+\\It is from $x\in \Var$ and $\WF(\varphi [x/x])$.
+\\The last is true since $\WF(\varphi)$ and the fact that substitution $[ x / x ]$ is always correct.
+\\2)We fixed some $t\in \Term$.
+\\We also have $\WF(\varphi[t/x])$
+\\Our aim is $\Tau \vdash \phi[t/x]$.
+\\If $\varphi$ is free for substitution of $x$ with $b$, then 
+$\Tau \vdash (\forall x.\varphi)\longrightarrow \varphi[b/x]$.
+\\We need to show that $\phi$ is free for substitution of $x$ with $t$.
+\\We already have it from $\WF(\varphi[t/x])$.
+%\\$P: \Term \to \Fm$. (Not very good representation...)\\
+%We need to rename every bound variable in $P(x)$, such that term $t$ will not contain any bound variable.
+\\So, by modus ponens and previous expression we have $\Tau \vdash \varphi[t/x]$.
+\\\myqed
+\end{theorem}
+
+\ \\...\\
 ...\\
 ...\\
 
-\end{definition}
 
 %\myprf
 %\myqed
