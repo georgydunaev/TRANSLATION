@@ -72,6 +72,7 @@
 \newcommand{\Fm}{{\mbox{Fm}}}
 \newcommand{\FV}{{\mbox{FV}}}
 \newcommand{\WF}{{\mbox{WF}}}
+\newcommand{\WWF}{{\mbox{WWF}}}
 \newcommand{\var}{{\mbox{var}}}
 \newcommand{\term}{{\mbox{term}}}
 \newcommand{\type}{{\mbox{type}}}
@@ -110,6 +111,7 @@ $\Spec = \{\mbox{``,",``(",``)",``.",}``\land",``\lor",``\longrightarrow", ``D"\
 Alphabeth $\mathcal{A} = \bigcup\{\Var, \Const, \Func, \Pred, \Spec\}$.
 \end{definition}
 
+This is a predicate that is true iff it is a usual first-order formula.
 \begin{definition}
 $\WF$ is a predicate of valence 1.\\
 *) $\WF(w) \Longrightarrow \WF(``("+w+``)")$\\
@@ -117,9 +119,16 @@ $\WF$ is a predicate of valence 1.\\
 ...
 \end{definition}
 
+\begin{definition}
+$\WF$ is a predicate of valence 1.\\
+We extend the definition of $\WF$ with additional constructor:\\
+*) $\WWF(D)=\top$
+\end{definition}
+
+
 It gives rise to a set of formulas $\Fm$ in that signature.
 \begin{definition}
-$\Fm = \{ w\in \mathcal{A}^* : \WF(w)\}.$
+$\Fm = \{ w\in \mathcal{A}^* : \WWF(w)\}.$
 \end{definition}
 
 \begin{definition}
@@ -219,7 +228,8 @@ Translation for types: $I_{\type}$
 \noindent
 \pagebreak
 \begin{theorem}
-(HERE $\vdash_w=\vdash$) Remember that $P(x)$ is just an apllication of the function P. It's not like the traditional notation $\varphi(x_1,\dots,x_n)$ that means that $\{x_1,\dots,x_n\}\subseteq \FV(\varphi)$.
+(HERE $\vdash_w=\vdash$) 
+Remember that $P(x)$ is just an apllication of the function P. It's not like the traditional notation $\varphi(x_1,\dots,x_n)$ that means that $\{x_1,\dots,x_n\}\subseteq \FV(\varphi)$.
 \\Let's prove the translation of
 $$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
 Its translation is
@@ -245,7 +255,7 @@ $$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
 Its translation is
 $$(\forall t\in \Term. \Tau \vdash_w \varphi[t/x])\longrightarrow \Tau \vdash_w (\forall x. \varphi).$$
 \myprf
-\\We have a hypothesis H:$(\forall x\in \Term. \WF(\varphi) \longrightarrow \Tau \vdash \varphi)$.
+\\We have a hypothesis H:$(\forall x\in \Term. \WF(\varphi) \longrightarrow \Tau \vdash_w \varphi)$.
 \\We also have hypothesis H2:$\WF(\forall x. \varphi)$.
 \\Since $\Tau$ is complete and $\WF(\forall x. \varphi)$,
 $$(\Tau \vdash \forall x. \varphi)\lor (\Tau\vdash \neg \forall x. \varphi).$$
@@ -282,15 +292,22 @@ We have a hypothesis H:$\Tau \vdash (\forall x. P(x))$.
 %\\The last is true since $\WF(\varphi)$ and the fact that substitution $[ x / x ]$ is always correct.
 %\\2)
 \\We fixed some $t\in \Term$.
-\\We also have $\WF(\varphi[t/x])$
-\\Our aim is $\Tau \vdash \phi[t/x]$.
-\\If $\varphi$ is free for substitution of $x$ with $b$, then 
+\\We also have $\WF(P(t))$
+\\by the ..., $t=x[t/x]$.
+\\Obviously, $P(t)=P(x[t/x])$
+\\By the property of P, $P(x[t/x])=P(x)[t/x]$.
+\\So $\WF(P(x)[t/x])$.
+\\Therefore $P(x)$ is free for substitution of $x$ with $t$.
+\\Our aim is $\Tau \vdash P(t)$.
+\\There is a fact that if $\varphi$ is free for substitution of $x$ with $b$, then 
 $\Tau \vdash (\forall x.\varphi)\longrightarrow \varphi[b/x]$.
-\\We need to show that $\phi$ is free for substitution of $x$ with $t$.
-\\We already have it from $\WF(\varphi[t/x])$.
+\\$\varphi\coloneqq P(x)$
+% \\BAD We need to show that $\phi$ is free for substitution of $x$ with $t$.
+% \\BAD We already have it from $\WF(\varphi[t/x])$.
 %\\$P: \Term \to \Fm$. (Not very good representation...)\\
 %We need to rename every bound variable in $P(x)$, such that term $t$ will not contain any bound variable.
-\\So, by modus ponens and previous expression we have $\Tau \vdash \varphi[t/x]$.
+\\So, by modus ponens with H and the previous expression we have $\Tau \vdash \varphi[t/x]$.
+It means that $\Tau \vdash P(t)$.
 \\\myqed
 \end{theorem}
 
