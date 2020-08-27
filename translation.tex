@@ -54,6 +54,7 @@
 \newcommand{\LRA}{\Longleftrightarrow}
 \newcommand{\defi}{{\mbox{def}}}
 \newcommand{\eqdef}{{\stackrel{\defi}{=}}}
+\newcommand{\rsto}{{\stackrel{RS}{\to}}}
 \newcommand{\propdef}{{\stackrel{\defi}{\ \Longleftrightarrow\ }}}
 \newcommand{\inter}{{\bigcap}}
 \newcommand{\interclass}{{{\bigcap}_C}}
@@ -78,6 +79,8 @@
 % Isabelle
 \newcommand{\spec}{{\mbox{spec}}}
 \newcommand{\allI}{{\mbox{allI}}}
+\newcommand{\exI}{{\mbox{exI}}}
+\newcommand{\exE}{{\mbox{exE}}}
 
 \begin{document}
 Our aim is to translate Isabelle's term into theorem statement, which is about derivability of certain formulas in the predicate calculus.
@@ -86,7 +89,7 @@ Our aim is to translate Isabelle's term into theorem statement, which is about d
 %We assume that there is one 
 
 The following assignment of the proof constant to some term  
-$$\mbox{exE}:``[| \exists x.P(x); \bigwedge x. P(x) \Longrightarrow R|] \Longrightarrow R"$$
+$$\exE:``[| \exists x.P(x); \bigwedge x. P(x) \Longrightarrow R|] \Longrightarrow R"$$
 is a notation for
 $$\mbox{exE}:``\exists x.P(x) \Longrightarrow \left(\left(\bigwedge x. P(x) \Longrightarrow R\right) \Longrightarrow R\right)".$$
 
@@ -184,7 +187,7 @@ Translation for types: $I_{\type}$
 \\1) $I_{\type}(i)=\Term$
 \\2) $I_{\type}(o)=\Fm$
 \\3) $I_{\type}(A\Rightarrow B)=I_{type}(A)\rightarrow I_{type}(B)$ (set of functions)
-\\Let's fix some function $I_\var$ from set of Isabelle's variables to .
+\\Let's fix some function $I_\var$ from the set of Isabelle's variables to the set $\Var$.
 \\Translation for terms: $I_{\term}$
 \\1) $I_{\term}(\Phi)= (\Tau \vdash_w \varphi)$
 % (\WF(\varphi) \longrightarrow (\Tau \vdash \varphi))$.
@@ -214,19 +217,21 @@ Translation for types: $I_{\type}$
 %\\
 
 \noindent
+\pagebreak
 \begin{theorem}
-(SKIP THIS WRONG THEOREM, HERE MISTAKENLY $\vdash_w=\vdash$)
+(HERE $\vdash_w=\vdash$) Remember that $P(x)$ is just an apllication of the function P. It's not like the traditional notation $\varphi(x_1,\dots,x_n)$ that means that $\{x_1,\dots,x_n\}\subseteq \FV(\varphi)$.
 \\Let's prove the translation of
 $$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
 Its translation is
-$$(\forall t\in \Term. \Tau \vdash P(t))\longrightarrow \Tau \vdash \forall x. P(x).$$
+$$\forall P:\Term\to\Fm. (\forall t\in \Term. \Tau \vdash P(t))\longrightarrow \Tau \vdash \forall x. P(x).$$
 \myprf
-\\We have a hypothesis H:$(\forall x\in \Term. \Tau \vdash P(x))$.
+\\We have a hypothesis H:$(\forall t\in \Term. \Tau \vdash P(t))$.
 \\Since $\Tau$ is complete,
 $$(\Tau \vdash \forall x. P(x))\lor (\Tau\vdash \neg \forall x. P(x)).$$
 Let's assume that $(\Tau\vdash \neg \forall x. P(x)).$
 \\It means $(\Tau\vdash \exists x. \neg P(x)).$
-\\$\Tau$ is a Henken theory, so there exists a constant $c$ such that $\Tau\vdash \neg P(c)$.
+\\$\Tau$ satisfies Henkin axioms. (e.g. $\Tau$ is a theory in a language that is a witnessing expansion of some theory) 
+\\$\Tau$ is a Henkin theory, so there exists a constant $c\coloneqq c_{\neg P(x)}$ such that $\Tau\vdash (\exists x. \neg P(x))\longrightarrow \neg P(c_{\neg P(x)})$. Therefore, $\Tau\vdash \neg P(c)$ by MP.
 \\Moreover, $c\in \Const \subseteq \Term$. $\stackrel{H}{\Longrightarrow} \Tau \vdash P(c)$.
 \\Theory proves both statement P(c) and it's negation, so $\Tau\vdash \bot$. This contradicts the assumption that $\Tau$ is consistent.
 \\Therefore, the other possibility holds: $(\Tau \vdash \forall x. P(x))$.
@@ -234,8 +239,8 @@ Let's assume that $(\Tau\vdash \neg \forall x. P(x)).$
 \end{theorem}
 
 \begin{theorem}
-(BETTER VARIANT?)
-\\Let's prove the translation of
+(ERRONEOUS VARIANT)\\
+Let's prove the translation of
 $$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
 Its translation is
 $$(\forall t\in \Term. \Tau \vdash_w \varphi[t/x])\longrightarrow \Tau \vdash_w (\forall x. \varphi).$$
@@ -253,8 +258,43 @@ Let's assume that $(\Tau\vdash \neg \forall x. \varphi).$
 \\Therefore, the other possibility holds: $(\Tau \vdash \forall x. P(x))$.
 \\\myqed
 \end{theorem}
+Substitution is defined on Term and Fm. We will expand it on functions. %
+\begin{definition}
+Assume $f \in (A \to B)$, $t\in\Term$, $v\in\Var$.
+$$f[t/v] = \{\langle a,b[t/v]\rangle: \langle a,b\rangle \in f\}$$
+\end{definition}
 
-\begin{theorem}
+\begin{definition}
+$$(X \rsto Y) = \{f:X \to Y |  \forall t\in\Term.\forall v\in\Var.\forall x\in X. f(x)[t/v] = f(x[t/v])\}$$
+\end{definition}
+
+\begin{theorem}(GOOD VARIANT)\\
+Consider IFOL's proof constant
+$$\spec: ``\forall x. P(x) ==> P(t)".$$
+%$$(\bigwedge t. P(t))==> \forall x. P(x).$$
+The translation of its term is
+$$\forall P:\Term\rsto\Fm.(\Tau \vdash_w \forall x. P(x))\longrightarrow  (\forall t\in \Term. \Tau \vdash_w P(t)).$$
+Let's prove it.\\
+\myprf\\
+We have a hypothesis H:$\Tau \vdash (\forall x. P(x))$.
+%\\1)Let's show that $\WF(\forall x. \varphi [x/x])$.
+%\\It is from $x\in \Var$ and $\WF(\varphi [x/x])$.
+%\\The last is true since $\WF(\varphi)$ and the fact that substitution $[ x / x ]$ is always correct.
+%\\2)
+\\We fixed some $t\in \Term$.
+\\We also have $\WF(\varphi[t/x])$
+\\Our aim is $\Tau \vdash \phi[t/x]$.
+\\If $\varphi$ is free for substitution of $x$ with $b$, then 
+$\Tau \vdash (\forall x.\varphi)\longrightarrow \varphi[b/x]$.
+\\We need to show that $\phi$ is free for substitution of $x$ with $t$.
+\\We already have it from $\WF(\varphi[t/x])$.
+%\\$P: \Term \to \Fm$. (Not very good representation...)\\
+%We need to rename every bound variable in $P(x)$, such that term $t$ will not contain any bound variable.
+\\So, by modus ponens and previous expression we have $\Tau \vdash \varphi[t/x]$.
+\\\myqed
+\end{theorem}
+
+\begin{theorem}(ERRONEOUS VARIANT)\\
 Assume that $I(P)=\varphi$.
 Consider the proof constant
 $$\spec: ``\forall x. P(x) ==> P(t)".$$
@@ -282,11 +322,24 @@ $\Tau \vdash (\forall x.\varphi)\longrightarrow \varphi[b/x]$.
 \\\myqed
 \end{theorem}
 
+
+% 1) every variable and constant in Isabelle's term should have some 
+% fixed type? without variable
+% formula shoul
+$$\exI:$$
+
+\begin{theorem}
+Let's prove the translation of
+$$\exE:``[| \exists x.P(x); \bigwedge x. P(x) \Longrightarrow R|] \Longrightarrow R"$$
+Its translation is
+$$\forall P:\Term\to\Fm.\forall R:\Fm. \Tau\vdash\exists x.P(x) \longrightarrow ((\forall x\in\Term. \Tau\vdash P(x) \longrightarrow \Tau\vdash R)\longrightarrow \Tau\vdash R)$$
+\end{theorem}
+
 \ \\...\\
 ...\\
 ...\\
-
-
+\section*{References}
+*  Barwise, Jon (ed.) (1977). \textit{Handbook of Mathematical Logic}. North-Holland.
 %\myprf
 %\myqed
 \end{document}
