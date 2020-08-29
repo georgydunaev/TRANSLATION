@@ -84,6 +84,8 @@
 \newcommand{\exE}{{\mbox{exE}}}
 
 \begin{document}
+Warning: this is a draft of a document on very early stage. It contains a lot of inconsistencies.\\
+
 Our aim is to translate Isabelle's term into theorem statement, which is about derivability of certain formulas in the predicate calculus.
 
 %Formulas are strings 
@@ -114,21 +116,22 @@ Alphabeth $\mathcal{A} = \bigcup\{\Var, \Const, \Func, \Pred, \Spec\}$.
 This is a predicate that is true iff it is a usual first-order formula.
 \begin{definition}
 $\WF$ is a predicate of valence 1.\\
-*) $\WF(w) \Longrightarrow \WF(``("+w+``)")$\\
-*) $\llbrack \WF(w_1), \WF(w_2) \rrbrack \Longrightarrow \WF(``("+w_1+``\land"+w_2+``)")$\\
+%*) $\WF(w) \Longrightarrow \WF(``("+w+``)")$\\
+%*) $\llbrack \WF(w_1), \WF(w_2) \rrbrack \Longrightarrow \WF(``("+w_1+``\land"+w_2+``)")$\\
+*) If $\WF(w)$ then $\WF(``("+w+``)")$.\\
+*) If $\WF(w_1)$ and $\WF(w_2)$ then $\WF(``("+w_1+``\land"+w_2+``)")$.\\
 ...
 \end{definition}
 
-\begin{definition}
-$\WF$ is a predicate of valence 1.\\
-We extend the definition of $\WF$ with additional constructor:\\
-*) $\WWF(D)=\top$
-\end{definition}
-
+%\begin{definition}
+%$\WF$ is a predicate of valence 1.\\
+%We extend the definition of $\WF$ with additional constructor:\\
+%*) $\WWF(D)=\top$
+%\end{definition}
 
 It gives rise to a set of formulas $\Fm$ in that signature.
 \begin{definition}
-$\Fm = \{ w\in \mathcal{A}^* : \WWF(w)\}.$
+$\Fm = \{ w\in \mathcal{A}^* : \WF(w)\}.$
 \end{definition}
 
 \begin{definition}
@@ -139,14 +142,28 @@ The substitution $t[b/x]$ of the variable with some term, is defined as usual:
 \end{definition}
 
 \begin{definition}
-Substitution of the variable with term in formula:
-$\varphi[b/x]$
+Substitution of the variable with term in formula $\varphi$:
+\\$\varphi[b/x]\in\mathcal{A}^*$
 \\$P(t_1, \dots, t_n)[b/x]=P(t_1[b/x], \dots, t_n[b/x])$
 \\$(\psi_1 \longrightarrow \psi_2)[b/x]=(\psi_1[b/x] \longrightarrow \psi_2[b/x])$
 \\$(\forall x. \psi)[b/x]=(\forall x. \psi)$
 \\$(\forall z. \psi)[b/x]=(\forall z. \psi[b/x])$ if $z\notin \FV(b)$;
 \\$(\forall z. \psi)[b/x]=D$ otherwise.
 \end{definition}
+
+% Therefore, $[b/x] \in \mathcal{A}^*$.
+
+\begin{definition}
+Substitution is defined on Term and Fm. We will expand it on functions. %
+
+Assume $f \in (A \to B)$, $t\in\Term$, $v\in\Var$.
+$$f[t/v] = \{\langle a,b[t/v]\rangle: \langle a,b\rangle \in f\}$$
+\end{definition}
+
+\begin{definition}
+$$(X \rsto Y) = \{f:X \to Y |  \forall t\in\Term.\forall v\in\Var.\forall x\in X. f(x)[t/v] = f(x[t/v])\}$$
+\end{definition}
+
 
 
 \begin{definition}
@@ -227,7 +244,7 @@ Translation for types: $I_{\type}$
 
 \noindent
 \pagebreak
-\begin{theorem}
+\begin{theorem} allI(A)
 (HERE $\vdash_w=\vdash$) 
 Remember that $P(x)$ is just an apllication of the function P. It's not like the traditional notation $\varphi(x_1,\dots,x_n)$ that means that $\{x_1,\dots,x_n\}\subseteq \FV(\varphi)$.
 \\Let's prove the translation of
@@ -248,7 +265,7 @@ Let's assume that $(\Tau\vdash \neg \forall x. P(x)).$
 \\\myqed
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem} allI(B)
 (ERRONEOUS VARIANT)\\
 Let's prove the translation of
 $$\allI:``\left(\bigwedge t. P(t)\right)==> \forall x. P(x)".$$
@@ -268,17 +285,9 @@ Let's assume that $(\Tau\vdash \neg \forall x. \varphi).$
 \\Therefore, the other possibility holds: $(\Tau \vdash \forall x. P(x))$.
 \\\myqed
 \end{theorem}
-Substitution is defined on Term and Fm. We will expand it on functions. %
-\begin{definition}
-Assume $f \in (A \to B)$, $t\in\Term$, $v\in\Var$.
-$$f[t/v] = \{\langle a,b[t/v]\rangle: \langle a,b\rangle \in f\}$$
-\end{definition}
 
-\begin{definition}
-$$(X \rsto Y) = \{f:X \to Y |  \forall t\in\Term.\forall v\in\Var.\forall x\in X. f(x)[t/v] = f(x[t/v])\}$$
-\end{definition}
-
-\begin{theorem}(GOOD VARIANT)\\
+\begin{theorem} spec(A)
+(GOOD VARIANT)\\
 Consider IFOL's proof constant
 $$\spec: ``\forall x. P(x) ==> P(t)".$$
 %$$(\bigwedge t. P(t))==> \forall x. P(x).$$
@@ -311,7 +320,8 @@ It means that $\Tau \vdash P(t)$.
 \\\myqed
 \end{theorem}
 
-\begin{theorem}(ERRONEOUS VARIANT)\\
+\begin{theorem} spec(B)
+(ERRONEOUS VARIANT)\\
 Assume that $I(P)=\varphi$.
 Consider the proof constant
 $$\spec: ``\forall x. P(x) ==> P(t)".$$
@@ -339,13 +349,79 @@ $\Tau \vdash (\forall x.\varphi)\longrightarrow \varphi[b/x]$.
 \\\myqed
 \end{theorem}
 
+\begin{lemma}
+$\psi[t/v]=\psi[x/v][t/x]$ if $``x"\notin\FV(\psi)$ and substitutions are correct.
+\\\myprf
+\\\dots
+\\\myqed
+\end{lemma}
+\begin{theorem} spec(C)\\
+Consider IFOL's proof constant
+$$\spec: ``\forall x. P(x) ==> P(t)".$$
+%$$(\bigwedge t. P(t))==> \forall x. P(x).$$
+\\During the proof we will use following assumptions:
+\\Assumption0: $t\in\Term$
+\\Assumption1: There are some formula $\psi$ and some variable $v$, such that $P$ is a partial function $(\lambda w\in\Term. \psi[w/v])$.
+% \\(TODO: define this function set-theoretically)
+\\(side aim: we may prove that P respects some substitutions)
+\\Assumption2: we need to be assured that every application has a value. Recursively we obtain the set of applications of atomic Isabelle's symbols: $\{``P(x)", ``P(t)"\}$. Therefore, our assumption is
+\\$\{``x", t\}\subseteq\dom(P)$.
+\\Assumption3: free variables of arguments and formula are not coinside.
+\\a)$\FV(``x")\cap\FV(\psi)=\varnothing$ (i.e. $``x"\notin\FV(\psi)$),
+\\b)$\FV(t)\cap\FV(\psi)=\varnothing$.
+% $``x"\in\FV(P)$ and $``t"\in\FV(P)$.
+\\So the possible translation of spec's term is
+% \forall P:\Term\rsto\Fm.
+%$$\forall P\in\{\dots\}.$$
+$$\forall \psi \in \Fm.$$
+$$P=(\lambda w\in\Term. \psi[w/v])\longrightarrow$$
+$$\FV(``x")\cap\FV(\psi)=\varnothing \longrightarrow$$
+$$\forall t\in \dom(P). $$
+$$\FV(t)\cap\FV(\psi)=\varnothing  \longrightarrow$$
+$$(\Tau \vdash \forall x. P(x))\longrightarrow  \Tau \vdash P(t).$$
+Let's prove it.
+\\\myprf
+\\We have a hypothesis H:$\Tau \vdash (\forall x. P(x))$.
+%\\1)Let's show that $\WF(\forall x. \varphi [x/x])$.
+%\\It is from $x\in \Var$ and $\WF(\varphi [x/x])$.
+%\\The last is true since $\WF(\varphi)$ and the fact that substitution $[ x / x ]$ is always correct.
+%\\2)
+\\We fixed some $t\in \dom(P)\subseteq\Term$.
+\\Therefore $P(t)\in\Fm$ and $\WF(P(t))$.(!)
+\\(by the way, $t\notin\dom(P)\longrightarrow P(t)=\varnothing$, but $\varnothing\notin\Fm$, since it is a word of zero length.)
+\\There is a fact that if $\varphi$ is free for substitution of $x$ with $b$, then 
+$\Tau \vdash (\forall x.\varphi)\longrightarrow \varphi[b/x]$.
+\\In order to use it, we need to prove that $P(t)=P(x)[t/x]$
+\\We need to show that $\psi[t/v]=\psi[x/v][t/x]$(*) by lemma.
+\\It is true, because: % $``x"\notin\FV(\psi)$ and substitutions are correct.
+\\a) Substitutions $[t/v]$ and $[x/v]$ are correct by other assumptions;
+%\\But what if $\psi$ contains $x$?!
+\\b)$``x"\notin\FV(\psi)$ by assumption 3(b).
+%\\-----------------------------
+%\\By the definition of substitution in terms, $t=x[t/x]$.
+%\\Obviously, $P(t)=P(x[t/x])$
+%\\By the property of P, $P(x[t/x])=P(x)[t/x]$.
+%\\So $\WF(P(x)[t/x])$.
+\\Therefore $P(x)$ is free for substitution of $x$ with $t$.
+\\Our aim is $\Tau \vdash P(t)$.
+% \\BAD We need to show that $\phi$ is free for substitution of $x$ with $t$.
+% \\BAD We already have it from $\WF(\varphi[t/x])$.
+%\\$P: \Term \to \Fm$. (Not very good representation...)\\
+%We need to rename every bound variable in $P(x)$, such that term $t$ will not contain any bound variable.
+\\$\varphi\coloneqq P(x)$ (therefore $\varphi=\psi[x/v]$)
+\\$\Tau \vdash (\forall x.\psi[x/v])\longrightarrow \psi[x/v][b/x]$.
+\\So, by modus ponens with H and the previous expression we have $\Tau \vdash \psi[x/v][t/x]$.
+It means that $\Tau \vdash P(t)$, by (*).
+\\\myqed
+\end{theorem}
+
 
 % 1) every variable and constant in Isabelle's term should have some 
 % fixed type? without variable
 % formula shoul
 $$\exI:$$
 
-\begin{theorem}
+\begin{theorem} exE(A)\\
 Let's prove the translation of
 $$\exE:``[| \exists x.P(x); \bigwedge x. P(x) \Longrightarrow R|] \Longrightarrow R"$$
 Its translation is
