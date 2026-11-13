@@ -1,0 +1,625 @@
+[
+  {
+    "english": "Alphabet",
+    "russian": "Алфавит",
+    "german": "Alphabet",
+    "category": "mathematical_logic",
+    "notes": "Non-empty set of symbols forming the base of a formal language"
+  },
+  {
+    "english": "Arity (Valence)",
+    "russian": "Арность (местность)",
+    "german": "Stelligkeit (Arität)",
+    "category": "mathematical_logic",
+    "notes": "Number of arguments taken by a function or predicate symbol"
+  },
+  {
+    "english": "Atomic Formula",
+    "russian": "Атомарная формула",
+    "german": "Atomare Formel",
+    "category": "mathematical_logic",
+    "notes": "Formula containing no logical connectives or quantifiers"
+  },
+  {
+    "english": "Axiom of Choice",
+    "russian": "Аксиома выбора",
+    "german": "Auswahlaxiom",
+    "category": "set_theory",
+    "notes": "Every collection of non-empty disjoint sets has a choice function"
+  },
+  {
+    "english": "Axiom of Extensionality",
+    "russian": "Аксиома объемности",
+    "german": "Extensionalitätsaxiom",
+    "category": "set_theory",
+    "notes": "Two sets or classes are equal if they have the same members"
+  },
+  {
+    "english": "Axiom of Foundation (Regularity)",
+    "russian": "Аксиома регулярности (фундирования)",
+    "german": "Fundierungsaxiom",
+    "category": "set_theory",
+    "notes": "Every non-empty set has an epsilon-minimal element"
+  },
+  {
+    "english": "Axiom of Infinity",
+    "russian": "Аксиома бесконечности",
+    "german": "Unendlichkeitsaxiom",
+    "category": "set_theory",
+    "notes": "Asserts the existence of at least one infinite set"
+  },
+  {
+    "english": "Axiom of Pairing",
+    "russian": "Аксиома неупорядоченной пары",
+    "german": "Paarmengenaxiom",
+    "category": "set_theory",
+    "notes": "Given two sets, their unordered pair is also a set"
+  },
+  {
+    "english": "Axiom of Power Set",
+    "russian": "Аксиома булеана (множества подмножеств)",
+    "german": "Potenzmengenaxiom",
+    "category": "set_theory",
+    "notes": "For any set, the collection of all its subsets is a set"
+  },
+  {
+    "english": "Axiom of Union",
+    "russian": "Аксиома объединения",
+    "german": "Vereinigungsaxiom",
+    "category": "set_theory",
+    "notes": "For any set of sets, the union of its elements is a set"
+  },
+  {
+    "english": "Bound Variable",
+    "russian": "Связанная переменная",
+    "german": "Gebundene Variable",
+    "category": "mathematical_logic",
+    "notes": "Variable occurring within the scope of a binding operator"
+  },
+  {
+    "english": "CakeML Verified Compiler",
+    "russian": "Верифицированный компилятор CakeML",
+    "german": "Verifizierter CakeML-Compiler",
+    "category": "proof_assistants",
+    "notes": "Formally verified compiler and runtime for a functional language subset"
+  },
+  {
+    "english": "Calculus of Inductive Constructions",
+    "russian": "Исчисление индуктивных конструкций",
+    "german": "Kalkül der induktiven Konstruktionen",
+    "category": "type_theory",
+    "notes": "Dependent type theory serving as the foundational system of Coq / Rocq"
+  },
+  {
+    "english": "Class Comprehension",
+    "russian": "Схема выделения классов",
+    "german": "Klassenaussonderung",
+    "category": "class_theory",
+    "notes": "Formation of a class of all sets satisfying a formula, unrestricted in MK"
+  },
+  {
+    "english": "Classical Logic",
+    "russian": "Классическая логика",
+    "german": "Klassische Logik",
+    "category": "mathematical_logic",
+    "notes": "Logic satisfying the law of excluded middle and double negation elimination"
+  },
+  {
+    "english": "Closed Formula (Sentence)",
+    "russian": "Замкнутая формула (высказывание)",
+    "german": "Geschlossene Formel (Satz)",
+    "category": "mathematical_logic",
+    "notes": "Formula containing no free variables"
+  },
+  {
+    "english": "Completeness",
+    "russian": "Полнота",
+    "german": "Vollständigkeit",
+    "category": "mathematical_logic",
+    "notes": "Every semantically valid formula is provable in the formal system"
+  },
+  {
+    "english": "Confluence (Church-Rosser)",
+    "russian": "Конфлюэнтность (свойство Чёрча-Россера)",
+    "german": "Konfluenz (Church-Rosser-Eigenschaft)",
+    "category": "type_theory",
+    "notes": "Diverging reduction paths can always be brought to a common form"
+  },
+  {
+    "english": "Conservative Extension",
+    "russian": "Консервативное расширение",
+    "german": "Konservative Erweiterung",
+    "category": "mathematical_logic",
+    "notes": "Theory extension that proves no new theorems in the original signature"
+  },
+  {
+    "english": "Consistency",
+    "russian": "Непротиворечивость",
+    "german": "Widerspruchsfreiheit",
+    "category": "mathematical_logic",
+    "notes": "Inability of a formal theory to derive a logical contradiction"
+  },
+  {
+    "english": "Constructible Universe",
+    "russian": "Конструктивный универсум",
+    "german": "Konstruierbares Universum",
+    "category": "set_theory",
+    "notes": "Hierarchical model L of set theory introduced by Kurt Gödel"
+  },
+  {
+    "english": "Context",
+    "russian": "Контекст",
+    "german": "Kontext",
+    "category": "type_theory",
+    "notes": "Ordered sequence of variable typing assumptions or hypotheses"
+  },
+  {
+    "english": "Cumulative Hierarchy",
+    "russian": "Кумулятивная иерархия",
+    "german": "Kumulative Hierarchie",
+    "category": "set_theory",
+    "notes": "Von Neumann universe V stratified by ordinal stages"
+  },
+  {
+    "english": "Cut Elimination",
+    "russian": "Элиминация сечений",
+    "german": "Schnittelimination",
+    "category": "proof_theory",
+    "notes": "Gentzen theorem establishing that cuts can be removed from sequent proofs"
+  },
+  {
+    "english": "Decidable Predicate",
+    "russian": "Разрешимый предикат",
+    "german": "Entscheidbares Prädikat",
+    "category": "mathematical_logic",
+    "notes": "Predicate whose truth value can be computed algorithmically"
+  },
+  {
+    "english": "Deduction Theorem",
+    "russian": "Теорема о дедукции",
+    "german": "Deduktionstheorem",
+    "category": "mathematical_logic",
+    "notes": "A implies B is provable if B is provable from hypothesis A"
+  },
+  {
+    "english": "Definite Description",
+    "russian": "Определенная дескрипция",
+    "german": "Bestimmte Deskription",
+    "category": "mathematical_logic",
+    "notes": "The iota binder designating the unique object satisfying a predicate"
+  },
+  {
+    "english": "Dependent Product (Pi-Type)",
+    "russian": "Зависимое произведение (Пи-тип)",
+    "german": "Abhängiges Produkt (Pi-Typ)",
+    "category": "type_theory",
+    "notes": "Type of functions where return type depends on the argument value"
+  },
+  {
+    "english": "Dependent Sum (Sigma-Type)",
+    "russian": "Зависимая сумма (Сигма-тип)",
+    "german": "Abhängige Summe (Sigma-Typ)",
+    "category": "type_theory",
+    "notes": "Type of pairs where the second element type depends on the first"
+  },
+  {
+    "english": "Discharge of Assumptions",
+    "russian": "Закрытие (разрядка) допущений",
+    "german": "Entlastung von Annahmen",
+    "category": "proof_theory",
+    "notes": "Removal of active hypotheses upon applying an inference rule"
+  },
+  {
+    "english": "Domain",
+    "russian": "Область определения",
+    "german": "Definitionsbereich",
+    "category": "set_theory",
+    "notes": "Set or class of all first components of an ordered relation"
+  },
+  {
+    "english": "Dunaev Tagged Ordered Pair",
+    "russian": "Меченая упорядоченная пара Дунаева",
+    "german": "Dunajew-markiertes geordnetes Paar",
+    "category": "class_theory",
+    "notes": "Pairing construction sound for proper classes without rank increase"
+  },
+  {
+    "english": "Ex Falso Quodlibet",
+    "russian": "Принцип следования из абсурда",
+    "german": "Ex falso quodlibet",
+    "category": "mathematical_logic",
+    "notes": "Principle that any statement follows from a logical contradiction"
+  },
+  {
+    "english": "First-Order Logic",
+    "russian": "Логика первого порядка",
+    "german": "Prädikatenlogik erster Stufe",
+    "category": "mathematical_logic",
+    "notes": "Predicate logic with quantification over individual domain elements"
+  },
+  {
+    "english": "Formulas-as-Types",
+    "russian": "Формулы как типы",
+    "german": "Formeln-als-Typen",
+    "category": "type_theory",
+    "notes": "Curry-Howard isomorphism relating propositions to types and proofs to terms"
+  },
+  {
+    "english": "Free for Substitution",
+    "russian": "Свободный для подстановки",
+    "german": "Frei für Einsetzung",
+    "category": "mathematical_logic",
+    "notes": "Term whose variables will not be captured by quantifiers upon substitution"
+  },
+  {
+    "english": "Free Variable",
+    "russian": "Свободная переменная",
+    "german": "Freie Variable",
+    "category": "mathematical_logic",
+    "notes": "Variable occurrence not bound by any quantifier or binder"
+  },
+  {
+    "english": "Grothendieck Universe",
+    "russian": "Универсум Гротендика",
+    "german": "Grothendieck-Universum",
+    "category": "set_theory",
+    "notes": "Set closed under standard ZFC set operations, modeling small categories"
+  },
+  {
+    "english": "Henkin Witness",
+    "russian": "Свидетель Хенкина",
+    "german": "Henkin-Zeuge",
+    "category": "mathematical_logic",
+    "notes": "Constant exemplifying an existential quantifier in an extended theory"
+  },
+  {
+    "english": "Herbrand Universe",
+    "russian": "Универсум Эрбрана",
+    "german": "Herbrand-Universum",
+    "category": "mathematical_logic",
+    "notes": "Set of all ground terms constructed from signature constants and functions"
+  },
+  {
+    "english": "Hilbert-Style Deduction System",
+    "russian": "Гильбертовская дедуктивная система",
+    "german": "Deduktionssystem im Hilbert-Stil",
+    "category": "proof_theory",
+    "notes": "Proof calculus based on rich axiom schemes and minimal inference rules"
+  },
+  {
+    "english": "Inductive Definition",
+    "russian": "Индуктивное определение",
+    "german": "Induktive Definition",
+    "category": "mathematical_logic",
+    "notes": "Specification of a set as the least fixed point of constructor rules"
+  },
+  {
+    "english": "Interpretation",
+    "russian": "Интерпретация",
+    "german": "Interpretation",
+    "category": "mathematical_logic",
+    "notes": "Assignment of domain and semantic denotations to signature symbols"
+  },
+  {
+    "english": "Intuitionistic Logic",
+    "russian": "Интуиционистская логика",
+    "german": "Intuitionistische Logik",
+    "category": "mathematical_logic",
+    "notes": "Constructive logic rejecting the unrestricted law of excluded middle"
+  },
+  {
+    "english": "Isabelle/ZF Object Logic",
+    "russian": "Объектная логика Isabelle/ZF",
+    "german": "Isabelle/ZF-Objektlogik",
+    "category": "proof_assistants",
+    "notes": "Formalization of Zermelo-Fraenkel set theory inside the Isabelle framework"
+  },
+  {
+    "english": "Judgment",
+    "russian": "Суждение",
+    "german": "Urteil",
+    "category": "type_theory",
+    "notes": "Metatheoretic assertion such as typing, equality, or validity"
+  },
+  {
+    "english": "Kuratowski Ordered Pair",
+    "russian": "Упорядоченная пара Куратовского",
+    "german": "Kuratowski-Paar",
+    "category": "set_theory",
+    "notes": "Standard set-theoretic pair of a and b defined as {{a}, {a, b}}"
+  },
+  {
+    "english": "Lambda Abstraction",
+    "russian": "Лямбда-абстракция",
+    "german": "Lambda-Abstraktion",
+    "category": "type_theory",
+    "notes": "Constructor binding a variable to define an anonymous function"
+  },
+  {
+    "english": "LCF Kernel",
+    "russian": "Ядро LCF",
+    "german": "LCF-Kern",
+    "category": "proof_assistants",
+    "notes": "Small abstract data type protecting theorem construction via sound rules"
+  },
+  {
+    "english": "Logical Connective",
+    "russian": "Логическая связка",
+    "german": "Logisches Junktor",
+    "category": "mathematical_logic",
+    "notes": "Operator combining formulas, including conjunction, disjunction, implication"
+  },
+  {
+    "english": "Metatheory",
+    "russian": "Метатеория",
+    "german": "Metatheorie",
+    "category": "mathematical_logic",
+    "notes": "Background mathematical framework used to analyze a formal object theory"
+  },
+  {
+    "english": "Model",
+    "russian": "Модель",
+    "german": "Modell",
+    "category": "mathematical_logic",
+    "notes": "Interpretation in which all axioms of a given theory evaluate to truth"
+  },
+  {
+    "english": "Modus Ponens",
+    "russian": "Модус поненс (правило отделения)",
+    "german": "Modus Ponens",
+    "category": "mathematical_logic",
+    "notes": "Rule inferring conclusion B from premise A and implication A implies B"
+  },
+  {
+    "english": "Monomorphic",
+    "russian": "Мономорфный",
+    "german": "Monomorph",
+    "category": "type_theory",
+    "notes": "Having a single fixed concrete type without type variables"
+  },
+  {
+    "english": "Morse-Kelley Class Theory",
+    "russian": "Теория классов Морса-Келли",
+    "german": "Morse-Kelley-Mengenlehre",
+    "category": "class_theory",
+    "notes": "Axiomatic class theory allowing bound class variables in comprehension"
+  },
+  {
+    "english": "Natural Deduction",
+    "russian": "Естественный вывод",
+    "german": "Natürliches Schließen",
+    "category": "proof_theory",
+    "notes": "Proof calculus featuring introduction and elimination rules for connectives"
+  },
+  {
+    "english": "Non-constructive",
+    "russian": "Неконструктивный",
+    "german": "Nicht-konstruktiv",
+    "category": "mathematical_logic",
+    "notes": "Demonstrating existence without furnishing an effective construction method"
+  },
+  {
+    "english": "Object Language",
+    "russian": "Объектный язык",
+    "german": "Objektsprache",
+    "category": "mathematical_logic",
+    "notes": "Formal symbolic language studied under a distinct metatheory"
+  },
+  {
+    "english": "Poly/ML Runtime",
+    "russian": "Среда выполнения Poly/ML",
+    "german": "Poly/ML-Laufzeitumgebung",
+    "category": "proof_assistants",
+    "notes": "High-performance Standard ML compiler supporting formal proof systems"
+  },
+  {
+    "english": "Polymorphic Lambda Calculus",
+    "russian": "Полиморфное лямбда-исчисление",
+    "german": "Polymorphes Lambda-Kalkül",
+    "category": "type_theory",
+    "notes": "System F extending typed lambda calculus with universal type quantification"
+  },
+  {
+    "english": "Proof Assistant",
+    "russian": "Интерактивный доказатель теорем",
+    "german": "Beweisassistent",
+    "category": "proof_assistants",
+    "notes": "Software tool providing machine-checked formal proof development"
+  },
+  {
+    "english": "Proof State",
+    "russian": "Состояние доказательства",
+    "german": "Beweiszustand",
+    "category": "proof_assistants",
+    "notes": "Current configuration of open subgoals and active hypotheses"
+  },
+  {
+    "english": "Proper Class",
+    "russian": "Собственный класс",
+    "german": "Echte Klasse",
+    "category": "class_theory",
+    "notes": "Class that cannot belong to any class or set, such as the universal class"
+  },
+  {
+    "english": "Pure Isabelle Framework",
+    "russian": "Логический каркас Pure Isabelle",
+    "german": "Pure-Isabelle-Framework",
+    "category": "proof_assistants",
+    "notes": "Meta-logic engine based on intuitionistic higher-order logic"
+  },
+  {
+    "english": "Range",
+    "russian": "Область значений",
+    "german": "Wertebereich",
+    "category": "set_theory",
+    "notes": "Set or class of all second components of an ordered relation"
+  },
+  {
+    "english": "Reflection Principle",
+    "russian": "Принцип отражения",
+    "german": "Reflexionsprinzip",
+    "category": "set_theory",
+    "notes": "Principle that any true set-theoretic statement holds in an initial segment"
+  },
+  {
+    "english": "Replacement Schema",
+    "russian": "Схема подстановки",
+    "german": "Ersetzungsschema",
+    "category": "set_theory",
+    "notes": "Image of a set under a class function is itself a set"
+  },
+  {
+    "english": "Semantic Consequence",
+    "russian": "Семантическое следование",
+    "german": "Semantische Folgerung",
+    "category": "mathematical_logic",
+    "notes": "Formula is true in all models satisfying the premise set"
+  },
+  {
+    "english": "Sequent Calculus",
+    "russian": "Секвенциальное исчисление",
+    "german": "Sequenzenkalkül",
+    "category": "proof_theory",
+    "notes": "Gentzen-style deductive system manipulating lists of antecedent and succedent formulas"
+  },
+  {
+    "english": "Signature",
+    "russian": "Сигнатура",
+    "german": "Signatur",
+    "category": "mathematical_logic",
+    "notes": "Collection of constant, function, and predicate symbols with arities"
+  },
+  {
+    "english": "Simplifier",
+    "russian": "Движок упрощения",
+    "german": "Vereinfacher",
+    "category": "proof_assistants",
+    "notes": "Automated engine applying term rewriting rules to simplify goal terms"
+  },
+  {
+    "english": "Skolemization",
+    "russian": "Сколемизация",
+    "german": "Skolemisierung",
+    "category": "mathematical_logic",
+    "notes": "Conversion replacing existential quantifiers with Skolem function symbols"
+  },
+  {
+    "english": "Small Inversion",
+    "russian": "Малая инверсия",
+    "german": "Kleine Inversion",
+    "category": "proof_assistants",
+    "notes": "Derivation of necessary constructor premises from an inductive hypothesis"
+  },
+  {
+    "english": "Soundness",
+    "russian": "Корректность (общезначимость)",
+    "german": "Korrektheit",
+    "category": "mathematical_logic",
+    "notes": "Every formally provable sentence is true in all admitting models"
+  },
+  {
+    "english": "Strong Normalization",
+    "russian": "Сильная нормализуемость",
+    "german": "Starke Normalisierbarkeit",
+    "category": "type_theory",
+    "notes": "Every valid reduction sequence terminates in finite steps"
+  },
+  {
+    "english": "Substitution",
+    "russian": "Подстановка",
+    "german": "Substitution (Einsetzung)",
+    "category": "mathematical_logic",
+    "notes": "Operation replacing variable occurrences with corresponding terms"
+  },
+  {
+    "english": "Syntactic Derivability",
+    "russian": "Синтаксическая выводимость",
+    "german": "Syntaktische Ableitbarkeit",
+    "category": "mathematical_logic",
+    "notes": "Existence of a finite chain of inference rule applications yielding the formula"
+  },
+  {
+    "english": "Tactic",
+    "russian": "Тактика",
+    "german": "Taktik",
+    "category": "proof_assistants",
+    "notes": "Goal-directed procedure reducing a proof goal to zero or more subgoals"
+  },
+  {
+    "english": "Tacticals",
+    "russian": "Тактикалы",
+    "german": "Taktikale",
+    "category": "proof_assistants",
+    "notes": "Higher-order combinators composing and chaining proof tactics"
+  },
+  {
+    "english": "Tagged Ordered Pair",
+    "russian": "Меченая упорядоченная пара",
+    "german": "Markiertes geordnetes Paar",
+    "category": "class_theory",
+    "notes": "Pair augmented with identifying tags distinguishing components"
+  },
+  {
+    "english": "Transfinite Induction",
+    "russian": "Трансфинитная индукция",
+    "german": "Transfinite Induktion",
+    "category": "set_theory",
+    "notes": "Inductive reasoning extended along well-ordered structures and ordinals"
+  },
+  {
+    "english": "Type Inference",
+    "russian": "Вывод типов",
+    "german": "Typinferenz (Typrekonstruktion)",
+    "category": "type_theory",
+    "notes": "Automatic algorithmic reconstruction of the most general type of an expression"
+  },
+  {
+    "english": "Valence",
+    "russian": "Местность (валентность)",
+    "german": "Valenz (Stelligkeit)",
+    "category": "mathematical_logic",
+    "notes": "Synonym for arity describing the number of slots in a relation or operator"
+  },
+  {
+    "english": "Von Neumann-Bernays-Gödel Set Theory (NBG)",
+    "russian": "Теория множеств фон Неймана-Бернайса-Гёделя (NBG)",
+    "german": "Von-Neumann-Bernays-Gödel-Mengenlehre (NBG)",
+    "category": "class_theory",
+    "notes": "Conservative class theory extension of ZFC with predicative class comprehension"
+  },
+  {
+    "english": "Weak Derivability",
+    "russian": "Слабая выводимость",
+    "german": "Schwache Ableitbarkeit",
+    "category": "mathematical_logic",
+    "notes": "Conditional derivability requiring well-formedness of the target formula"
+  },
+  {
+    "english": "Well-Formed Formula",
+    "russian": "Правильно построенная формула",
+    "german": "Wohlgeformte Formel",
+    "category": "mathematical_logic",
+    "notes": "Syntactically valid formula according to grammar rules"
+  },
+  {
+    "english": "Well-Founded Relation",
+    "russian": "Вполне фундированное отношение",
+    "german": "Wohlfundierte Relation",
+    "category": "set_theory",
+    "notes": "Binary relation where every non-empty subset has a minimal element"
+  },
+  {
+    "english": "Witnessing Expansion",
+    "russian": "Свидетельствующее расширение",
+    "german": "Zeugenerweiterung",
+    "category": "mathematical_logic",
+    "notes": "Theory expansion adjoining witnessing constants for all existential formulas"
+  },
+  {
+    "english": "Zermelo-Fraenkel Set Theory with Choice (ZFC)",
+    "russian": "Теория множеств Цермело-Френкеля с аксиомой выбора (ZFC)",
+    "german": "Zermelo-Fraenkel-Mengenlehre mit Auswahlaxiom (ZFC)",
+    "category": "set_theory",
+    "notes": "Standard foundational axiomatic system for modern mathematics"
+  }
+]

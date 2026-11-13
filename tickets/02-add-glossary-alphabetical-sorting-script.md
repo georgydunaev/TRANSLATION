@@ -2,7 +2,7 @@
 
 **Project:** TRANSLATION
 **Importance:** 3/10
-**State:** opened
+**State:** closed
 **Target Model Tier:** Tier 2 / Tier 3 (Free Cloud / Small LLMs)
 **Labels:** user, simple-task, tier2-model, tier3-model, TRANSLATION
 
@@ -13,3 +13,12 @@ Create `sort_glossary.py` in `TRANSLATION/` that parses markdown table rows in `
 1. Implementation is clean, tested, and self-contained within `TRANSLATION/`.
 2. Do not modify files outside `TRANSLATION/`.
 3. Verify syntax and tests pass without errors.
+
+## Resolution
+Resolved. Implemented `sort_glossary.py` supporting:
+- Markdown table parsing and column count verification.
+- Case-insensitive alphabetical sorting by English term.
+- Case-insensitive deduplication of entries.
+- Automated `--check` mode for continuous integration testing.
+- Bidirectional synchronization between `glossary.json` and `GLOSSARY.md`.
+- Verified via CLI and unit test suite in `tests/test_translation.py`.
