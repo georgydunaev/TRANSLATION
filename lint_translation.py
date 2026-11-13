@@ -13,6 +13,12 @@ import re
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
+from latex_token_preprocessor import (
+    LatexTokenPreprocessor,
+    preprocess_latex_tokens,
+    restore_latex_tokens,
+)
+
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_TEX_PATH = os.path.join(ROOT_DIR, "translation.tex")
 DEFAULT_MD_PATH = os.path.join(ROOT_DIR, "GLOSSARY.md")
@@ -218,6 +224,20 @@ def verify_utf8_integrity(file_path: str):
     return issues
 
 
+def check_latex_token_protection(text: str):
+    """Verify that all mathematical tokens and delimiters roundtrip cleanly through preprocessing."""
+    preprocessor = LatexTokenPreprocessor()
+    ok, msg = preprocessor.verify_roundtrip(text)
+    if not ok:
+        return [{
+            "line": 0,
+            "type": "token_protection_error",
+            "message": f"LaTeX token protection roundtrip failed: {msg}",
+            "severity": "error",
+        }]
+    return []
+
+
 def lint_latex_file(file_path: str, strict: bool = False):
     """Run full lint checks on a LaTeX file.
 
@@ -245,6 +265,9 @@ def lint_latex_file(file_path: str, strict: bool = False):
 
     delim_issues = check_latex_delimiters(content)
     all_issues.extend(delim_issues)
+
+    token_issues = check_latex_token_protection(content)
+    all_issues.extend(token_issues)
 
     typo_issues = scan_for_typos(content)
     all_issues.extend(typo_issues)

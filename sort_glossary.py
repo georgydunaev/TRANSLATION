@@ -12,6 +12,11 @@ import re
 import sys
 from typing import Dict, List, Optional, Tuple
 
+from glossary_index import (
+    TerminologyIndex,
+    validate_glossary_consistency,
+)
+
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_MD_PATH = os.path.join(ROOT_DIR, "GLOSSARY.md")
 DEFAULT_JSON_PATH = os.path.join(ROOT_DIR, "glossary.json")
@@ -248,6 +253,11 @@ def sort_json_glossary(json_path: str = DEFAULT_JSON_PATH, check_only: bool = Fa
             return False
         if data != sorted_data:
             print("JSON glossary entries are not sorted alphabetically.", file=sys.stderr)
+            return False
+        consistency = validate_glossary_consistency(json_path)
+        if not consistency["is_valid"]:
+            for err in consistency["errors"]:
+                print(f"[CONSISTENCY ERROR] {err}", file=sys.stderr)
             return False
         return True
 

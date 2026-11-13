@@ -23,6 +23,7 @@ if ROOT not in sys.path:
 from lint_translation import (
     check_latex_delimiters,
     check_latex_environments,
+    check_latex_token_protection,
     lint_latex_file,
     lint_markdown_file,
     scan_for_typos,
@@ -34,6 +35,18 @@ from sort_glossary import (
     sort_markdown_glossary,
     validate_glossary_table,
 )
+from latex_token_preprocessor import (
+    LatexTokenPreprocessor,
+    MathSymbolProtectionPipeline,
+    preprocess_latex_tokens,
+    restore_latex_tokens,
+)
+from glossary_index import (
+    GlossaryEntry,
+    TerminologyIndex,
+    normalize_term,
+    validate_glossary_consistency,
+)
 
 
 class TestTranslation(unittest.TestCase):
@@ -43,6 +56,8 @@ class TestTranslation(unittest.TestCase):
         self.json_path = os.path.join(ROOT, "glossary.json")
         self.sort_script = os.path.join(ROOT, "sort_glossary.py")
         self.lint_script = os.path.join(ROOT, "lint_translation.py")
+        self.preprocessor_script = os.path.join(ROOT, "latex_token_preprocessor.py")
+        self.index_script = os.path.join(ROOT, "glossary_index.py")
 
     def test_translation_tex_exists_and_balanced_environments(self):
         self.assertTrue(os.path.isfile(self.tex_path))
@@ -207,6 +222,119 @@ class TestTranslation(unittest.TestCase):
         delim_issues = check_latex_delimiters(odd_dollars)
         self.assertTrue(any(i["type"] == "unmatched_dollar_signs" for i in delim_issues))
 
+    def test_latex_token_preprocessor_roundtrip_on_translation_tex(self):
+        with open(self.tex_path, "r", encoding="utf-8", errors="replace") as f:
+            content = f.read()
+        protected, registry = preprocess_latex_tokens(content)
+        self.assertGreater(len(registry), 500)
+        self.assertNotIn("$$p(s)=", protected)
+        restored = restore_latex_tokens(protected, registry)
+        self.assertEqual(content, restored)
+
+    def test_latex_token_preprocessor_protects_math_environments_and_delimiters(self):
+        sample = (
+            "We denote \\( x \\in A \\) and display equation:\n"
+            "\\begin{equation}\n"
+            "\\sum_{i=1}^n i = \\frac{n(n+1)}{2}\n"
+            "\\end{equation}\n"
+            "See \\cite{Euler1736} for details. Cost is $100 and tax is 5\\%."
+        )
+        preprocessor = LatexTokenPreprocessor()
+        protected, registry = preprocessor.preprocess(sample)
+        self.assertNotIn("\\sum", protected)
+        self.assertNotIn("\\begin{equation}", protected)
+        self.assertNotIn("\\cite{Euler1736}", protected)
+        self.assertNotIn("5\\%", protected)
+        restored = preprocessor.restore(protected, registry)
+        self.assertEqual(sample, restored)
+
+    def test_latex_token_preprocessor_tolerant_restoration(self):
+        sample = "Formula $\\alpha \\land \\beta$ and display $$X \\subseteq Y$$."
+        protected, registry = preprocess_latex_tokens(sample)
+        modified_protected = protected.replace("__LATEX_TOKEN_0__", "__ LATEX_TOKEN_0 __")
+        restored = restore_latex_tokens(modified_protected, registry, tolerant=True)
+        self.assertIn("$\\alpha \\land \\beta$", restored)
+        self.assertIn("$$X \\subseteq Y$$", restored)
+
+    def test_math_symbol_protection_pipeline(self):
+        pipeline = MathSymbolProtectionPipeline()
+        pipeline.register_symbol("\\customoperator")
+        text = "Expression with \\customoperator and \\forall x."
+        protected, registry = pipeline.protect(text)
+        self.assertNotIn("\\customoperator", protected)
+        self.assertNotIn("\\forall", protected)
+        restored = pipeline.restore(protected, registry)
+        self.assertEqual(text, restored)
+
+    def test_glossary_index_exact_lookup_and_normalization(self):
+        index = TerminologyIndex.from_json_file(self.json_path)
+        self.assertGreaterEqual(len(index), 85)
+
+        entry = index.lookup("Axiom of Choice")
+        self.assertIsNotNone(entry)
+        self.assertEqual(entry.russian, "Аксиома выбора")
+        self.assertEqual(entry.german, "Auswahlaxiom")
+
+        entry_cased = index.lookup("   axiom of choice   ")
+        self.assertEqual(entry, entry_cased)
+
+        entry_alias = index.lookup("Valence")
+        self.assertIsNotNone(entry_alias)
+        self.assertEqual(entry_alias.english, "Arity (Valence)")
+
+    def test_glossary_index_bidirectional_translation(self):
+        index = TerminologyIndex.from_json_file(self.json_path)
+
+        ru = index.translate("Axiom of Choice", "en", "ru")
+        self.assertEqual(ru, "Аксиома выбора")
+        en = index.translate("Аксиома выбора", "ru", "en")
+        self.assertEqual(en, "Axiom of Choice")
+
+        de = index.translate("Аксиома выбора", "ru", "de")
+        self.assertEqual(de, "Auswahlaxiom")
+        ru_from_de = index.translate("Auswahlaxiom", "de", "ru")
+        self.assertEqual(ru_from_de, "Аксиома выбора")
+
+        en_from_de = index.translate("Auswahlaxiom", "de", "en")
+        self.assertEqual(en_from_de, "Axiom of Choice")
+
+    def test_glossary_index_fuzzy_matching(self):
+        index = TerminologyIndex.from_json_file(self.json_path)
+        matches = index.fuzzy_lookup("Axoim of Choise", source_lang="en")
+        self.assertTrue(len(matches) > 0)
+        best_entry, score, matched_term = matches[0]
+        self.assertEqual(best_entry.english, "Axiom of Choice")
+        self.assertGreater(score, 0.75)
+
+        de_matches = index.fuzzy_lookup("fundierungsaxiom", source_lang="de")
+        self.assertTrue(len(de_matches) > 0)
+        self.assertEqual(de_matches[0][0].german, "Fundierungsaxiom")
+
+    def test_glossary_consistency_validation(self):
+        report = validate_glossary_consistency(self.json_path)
+        self.assertTrue(report["is_valid"])
+        self.assertEqual(report["errors"], [])
+        self.assertGreaterEqual(report["total_entries"], 85)
+
+    def test_preprocessor_and_glossary_cli_execution(self):
+        res_prep = subprocess.run(
+            [sys.executable, self.preprocessor_script, "--file", self.tex_path, "--roundtrip"],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(res_prep.returncode, 0)
+        self.assertIn("Roundtrip check: PASSED", res_prep.stdout)
+
+        res_idx = subprocess.run(
+            [sys.executable, self.index_script, "--validate"],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(res_idx.returncode, 0)
+        self.assertIn("Consistency:      PASSED", res_idx.stdout)
+
     def test_invariants_zero_emojis_and_no_arrows(self):
         # Scan files for emojis and arrows
         files_to_check = [
@@ -214,6 +342,8 @@ class TestTranslation(unittest.TestCase):
             self.json_path,
             self.sort_script,
             self.lint_script,
+            self.preprocessor_script,
+            self.index_script,
         ]
         emoji_pattern = re.compile(
             r"[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF\U00002702-\U000027B0\U0001F900-\U0001F9FF]"
